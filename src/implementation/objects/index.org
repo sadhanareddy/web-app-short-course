@@ -178,6 +178,109 @@ class TestEmail(TestCase):
         self.assertRaises(TypeError, Email, "123")
 #+END_SRC
 
+** Role
+
+*** Introduction
+   A Role has got certain privileges.  In this current application, the
+   privileges are understood 
+   
+   Different types of roles are:
+   - Admin :: An admin is an user who can add, modify and delete other users
+        except himself.
+   - User :: A User is a user who can view all other users and can modify himself.
+
+
+*** Mutable Data
+
+     These are the data associated with Role type, which are mutable
+
+     + Name
+
+
+*** Definition
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+class Role(object):
+    name = None
+#+END_SRC
+
+
+*** Constructor
+
+    The signature of Role is defined as follows
+    #+BEGIN_EXAMPLE
+    role = Role(name=<Object of Name>)
+    #+END_EXAMPLE
+
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def __init__(self, **kwargs):
+        if 'name' not in kwargs:
+            raise AttributeRequired("mandatory attribute `name` is missing")
+        self.set_name(kwargs['name'])
+#+END_SRC
+
+*** Test Constructor
+#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+class TestRole(TestCase):
+    TESTING = True
+    def test_role_creation(self):
+        print "test_role_creation"
+        role = Role(name=Name('admin'))
+        self.assertEqual(role.get_name(), 'admin')
+#+END_SRC
+
+
+*** Functions
+
+**** setName
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def set_name(self, name):
+        self.name = name.value
+#+END_SRC
+
+****** Test
+#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+    def test_role_set_name(self):
+        print "test_role_set_name"
+        role = Role(name=Name('admin'))
+        new_name = Name('staff')
+        role.set_name(new_name)
+        self.assertEqual(role.name, new_name.value)
+#+END_SRC
+
+
+**** getName
+
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def get_name(self):
+        return self.name
+#+END_SRC
+     
+
+**** getAll: Nil --> set[Role]
+
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+#    @staticmethod
+#    def get_all():
+#        return Role.roles
+#        pass
+#+END_SRC
+
+
+***** Test getAll: Nil --> set[Role]
+ #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+    def test_role_get_all(self):
+        print "test_role_get_all"
+ #+END_SRC
+
+
+**** to_client
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def to_client(self):
+        print "fill"
+#+END_SRC
+
 ** User
 
 *** Mutable Data
@@ -195,7 +298,7 @@ class User(object):
 #    users = []     # this is a static variable, accessed by User.users
     name = None
     email = None
-    role = ''
+    role = None
 #+END_SRC
 
 
@@ -231,10 +334,13 @@ class User(object):
 class TestUser(TestCase):
     TESTING = True
 
-    def test_user_creation_without_role(self):
+    def test_user_get_role(self):
         print "test_user_creation_without_role"
+        user = User(name=Name('yogesh'), email=Email('yogesh@vlabs.ac.in'), role='test')
+        role = user.get_role()
+        self.assertEqual(role, 'test')
 
-    def test_user_creation_with_role(self):
+    def test_user_get(self):
         print "test_user_creation_with_role"
  #+END_SRC
 
@@ -315,103 +421,6 @@ class TestUser(TestCase):
             'email': self.email,
             'role': self.role.to_client()
         }
-#+END_SRC
-
-
-
-** Role
-
-*** Introduction
-   A Role has got certain privileges.  In this current application, the
-   privileges are understood 
-   
-   Different types of roles are:
-   - Admin :: An admin is an user who can add, modify and delete other users
-        except himself.
-   - User :: A User is a user who can view all other users and can modify himself.
-
-
-*** Mutable Data
-
-     These are the data associated with Role type, which are mutable
-
-     + Name
-
-
-*** Definition
-#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-class Role():
-
-#+END_SRC
-
-
-*** Constructor
-
-    The signature of Role is defined as follows
-    #+BEGIN_EXAMPLE
-    role = Role(name=<Object of Name>)
-    #+END_EXAMPLE
-
-#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def __init__(self, **kwargs):
-        print "fill"
-#+END_SRC
-
-*** Test Constructor
-#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-class TestRole(TestCase):
-    TESTING = True
-    def test_role_creation(self):
-        print "test_role_creation"
-#+END_SRC
-
-
-*** Functions
-
-**** setName
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def set_name(self, name):
-        print "fill"
-#+END_SRC
-
-****** Test
-#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-    def test_role_set_name(self):
-        print "test_role_set_name"
-#+END_SRC
-
-
-**** getName
-
-#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def get_name(self):
-        print "fill"
-#+END_SRC
-
-
-**** getAll: Nil --> set[Role]
-
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    @staticmethod
-    def get_all():
-#        return Role.roles
-        pass
-#+END_SRC
-
-
-***** Test getAll: Nil --> set[Role]
- #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-    def test_role_get_all(self):
-        print "test_role_get_all"
- #+END_SRC
-
-
-**** to_client
-#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def to_client(self):
-        print "fill"
 #+END_SRC
 
 * Run Test Cases

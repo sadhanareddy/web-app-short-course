@@ -156,9 +156,12 @@ class TestName(TestCase):
 class Email(object):
     value = None
     def __init__(self, value):
-        print "fill"
+        if is_email(value):
+            self.value = value
+        else:
+            raise TypeError('%s is not a Email!' % value)
     def __str__(self):
-        print "fill"
+        return self.value
         
 #+END_SRC
 
@@ -168,6 +171,11 @@ class TestEmail(TestCase):
     TESTING = True
     def test_email_type(self):
         print "test_email_type"
+        new_email = Email("yogesh@vlabs.ac.in")
+        # correct email
+        self.assertEqual(new_email.value, "yogesh@vlabs.ac.in")
+        # incorrect email
+        self.assertRaises(TypeError, Email, "123")
 #+END_SRC
 
 ** User
@@ -201,7 +209,17 @@ class User():
 
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def __init__(self, **kwargs):
-        print "fill"
+        if 'name' not in kwargs:
+            raise AttributeRequired("mandatory attribute `name` is missing")
+        self.set_name(kwargs['name'])
+
+        if 'email' not in kwargs:
+            raise AttributeRequired("mandatory attribute `email` is missing")
+        self.set_email(kwargs['email'])
+
+        if 'role' not in kwargs:
+            raise AttributeRequired("mandatory attribute `role` is missing")
+        self.set_role(kwargs['role'])
 #+END_SRC
 
 

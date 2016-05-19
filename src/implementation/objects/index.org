@@ -191,8 +191,11 @@ class TestEmail(TestCase):
 
 *** Definition
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-class User():
-    users = []     # this is a static variable, accessed by User.users
+class User(object):
+#    users = []     # this is a static variable, accessed by User.users
+    name = None
+    email = None
+    role = ''
 #+END_SRC
 
 
@@ -242,7 +245,7 @@ class TestUser(TestCase):
 ***** Implementaion
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def set_email(self, email):
-        print "fill"
+        self.email = email.value
 #+END_SRC
 
 ***** Test
@@ -251,7 +254,7 @@ class TestUser(TestCase):
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def set_name(self, name):
-        print "fill"
+        self.name = name.value
 #+END_SRC
 ***** Test
 
@@ -259,7 +262,7 @@ class TestUser(TestCase):
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def set_role(self, role):
-        print "fill"
+        self.role = role
 #+END_SRC
 ***** Test
 
@@ -267,7 +270,7 @@ class TestUser(TestCase):
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def get_role(self):
-        print "fill"
+        return self.role
 #+END_SRC
 ***** Test
 
@@ -275,14 +278,14 @@ class TestUser(TestCase):
 **** getEmail
  #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def get_email(self):
-        print "fill"
+        return self.email
  #+END_SRC
 
 
 **** getName
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def get_name(self):
-        print "fill"
+        return self.name
 #+END_SRC
 
 
@@ -290,9 +293,9 @@ class TestUser(TestCase):
 
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    @staticmethod
-    def get_all():
-        print "fill"
+#    @staticmethod
+#    def get_all():
+#        return users
 #+END_SRC
 
 
@@ -307,12 +310,11 @@ class TestUser(TestCase):
 **** toClient
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def to_client(self):
-        pass
-#        return {
-#            'name': self.name,
-#            'email': self.email,
-#            'role': self.role.to_client()
-#        }
+        return {
+            'name': self.name,
+            'email': self.email,
+            'role': self.role.to_client()
+        }
 #+END_SRC
 
 

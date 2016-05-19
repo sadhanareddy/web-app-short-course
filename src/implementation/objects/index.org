@@ -156,9 +156,12 @@ class TestName(TestCase):
 class Email(object):
     value = None
     def __init__(self, value):
-        print "fill"
+        if is_email(value):
+            self.value = value
+        else:
+            raise TypeError('%s is not a Email!' % value)
     def __str__(self):
-        print "fill"
+        return self.value
         
 #+END_SRC
 
@@ -168,6 +171,11 @@ class TestEmail(TestCase):
     TESTING = True
     def test_email_type(self):
         print "test_email_type"
+        new_email = Email("yogesh@vlabs.ac.in")
+        # correct email
+        self.assertEqual(new_email.value, "yogesh@vlabs.ac.in")
+        # incorrect email
+        self.assertRaises(TypeError, Email, "123")
 #+END_SRC
 
 ** User
@@ -183,8 +191,11 @@ class TestEmail(TestCase):
 
 *** Definition
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-class User():
-    users = []     # this is a static variable, accessed by User.users
+class User(object):
+#    users = []     # this is a static variable, accessed by User.users
+    name = None
+    email = None
+    role = ''
 #+END_SRC
 
 
@@ -201,7 +212,17 @@ class User():
 
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def __init__(self, **kwargs):
-        print "fill"
+        if 'name' not in kwargs:
+            raise AttributeRequired("mandatory attribute `name` is missing")
+        self.set_name(kwargs['name'])
+
+        if 'email' not in kwargs:
+            raise AttributeRequired("mandatory attribute `email` is missing")
+        self.set_email(kwargs['email'])
+
+        if 'role' not in kwargs:
+            raise AttributeRequired("mandatory attribute `role` is missing")
+        self.set_role(kwargs['role'])
 #+END_SRC
 
 
@@ -224,7 +245,7 @@ class TestUser(TestCase):
 ***** Implementaion
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def set_email(self, email):
-        print "fill"
+        self.email = email.value
 #+END_SRC
 
 ***** Test
@@ -233,7 +254,7 @@ class TestUser(TestCase):
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def set_name(self, name):
-        print "fill"
+        self.name = name.value
 #+END_SRC
 ***** Test
 
@@ -241,7 +262,7 @@ class TestUser(TestCase):
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def set_role(self, role):
-        print "fill"
+        self.role = role
 #+END_SRC
 ***** Test
 
@@ -249,7 +270,7 @@ class TestUser(TestCase):
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def get_role(self):
-        print "fill"
+        return self.role
 #+END_SRC
 ***** Test
 
@@ -257,14 +278,14 @@ class TestUser(TestCase):
 **** getEmail
  #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def get_email(self):
-        print "fill"
+        return self.email
  #+END_SRC
 
 
 **** getName
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def get_name(self):
-        print "fill"
+        return self.name
 #+END_SRC
 
 
@@ -272,9 +293,9 @@ class TestUser(TestCase):
 
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    @staticmethod
-    def get_all():
-        print "fill"
+#    @staticmethod
+#    def get_all():
+#        return users
 #+END_SRC
 
 
@@ -289,12 +310,11 @@ class TestUser(TestCase):
 **** toClient
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def to_client(self):
-        pass
-#        return {
-#            'name': self.name,
-#            'email': self.email,
-#            'role': self.role.to_client()
-#        }
+        return {
+            'name': self.name,
+            'email': self.email,
+            'role': self.role.to_client()
+        }
 #+END_SRC
 
 
@@ -312,7 +332,7 @@ class TestUser(TestCase):
 
 
 *** Mutable Data
-
+    
      These are the data associated with Role type, which are mutable
 
      + Name
@@ -320,7 +340,8 @@ class TestUser(TestCase):
 
 *** Definition
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-class Role():
+class Role(object):
+   name= None
 
 #+END_SRC
 
@@ -334,7 +355,9 @@ class Role():
 
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def __init__(self, **kwargs):
-        print "fill"
+        if 'name' not in kwargs:
+           raise AttributeRequired("mandatory attribute `name` is missing")
+        self.set_name(kwargs['name'])
 #+END_SRC
 
 *** Test Constructor
@@ -352,7 +375,7 @@ class TestRole(TestCase):
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def set_name(self, name):
-        print "fill"
+        self.name = name.value
 #+END_SRC
 
 ****** Test
@@ -366,7 +389,7 @@ class TestRole(TestCase):
 
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def get_name(self):
-        print "fill"
+        return self.name
 #+END_SRC
 
 

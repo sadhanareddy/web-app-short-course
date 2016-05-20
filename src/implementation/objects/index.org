@@ -443,7 +443,7 @@ class Session(object):
     def __init__(self, **kwargs):
         if 'user' not in kwargs:
             raise AttributeRequired('mandatory variable `user` is missing!')
-        self._set_user(kwargs['user'])
+        self._set_user_session(kwargs['user'])
 
 #+END_SRC
 
@@ -457,20 +457,43 @@ class TestSession(TestCase):
         user = User(name=Name('yogesh'), email=Email('yogesh@vlabs.ac.in'), role=Role.admin)
         session = Session(user=user)
         self.assertEqual(isinstance(session, Session), True)
-        self.assertEqual(session.user.name.value, "yogesh")
+        self.assertEqual(session.user, user)
 #+END_SRC
 
 *** Functions
-**** _set_user
+**** _set_user_session
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def _set_user(self, user):
+    def _set_user_session(self, user):
         if not isinstance(user, User):
             raise TypeError('`user` argument should be of type user')
         else:
             self.user = user
 #+END_SRC
 ***** Test
+#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+    def test_set_user_session(self):
+        print "test_set_user_session"
+        user = User(name=Name('yogesh'), email=Email('yogesh@vlabs.ac.in'), role=Role.admin)
+        session = Session(user=user)
+        new_user = User(name=Name('newuser'), email=Email('newuser@vlabs.ac.in'), role=Role.user)
+        session._set_user_session(new_user)
+        self.assertEqual(session.user, new_user)
+#+END_SRC
+**** get_user_session
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def get_user_session(self):
+        return self.user
+#+END_SRC
+***** Test
+#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+    def test_get_user_session(self):
+        print "test_get_user_session"
+        user = User(name=Name('user'), email=Email('user@vlabs.ac.in'), role=Role.user)
+        session = Session(user=user)
+        self.assertEqual(session.get_user_session(), user)
+#+END_SRC
 * Run Test Cases
  
 #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no

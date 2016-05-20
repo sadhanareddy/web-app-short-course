@@ -528,18 +528,27 @@ class System():
      #+END_EXAMPLE
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def __init__(self):
-        if not already_initialized:
+        if not System.already_initialized:
             admin_user = User(name=Name('admin'), email=Email('admin@vlabs.ac.in'), role=Role.admin)
             System.user_set.add(admin_user)
             System.already_initialized = True
         else:
-            raise ConstraintError
+            raise ConstraintError('System is already initialized!')
 #+END_SRC
 **** Test the constructor
 #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-    def test_session_constructor(self):
-        print "test_session_constructor"
+class TestSystem(TestCase):
+    TESTING = True
+
+    def setUp(self):
         system = System()
+
+    def tearDown(self):
+        System.user_set.pop()
+        System.already_initialized = False
+
+    def test_system_constructor(self):
+        print "test_system_constructor"
         user_set_list = list(System.user_set)
         user = user_set_list[0]
         self.assertEqual(isinstance(user, User), True)

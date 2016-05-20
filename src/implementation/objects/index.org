@@ -525,8 +525,8 @@ class System():
     def test_session_constructor(self):
         print "test_session_constructor"
         system = System()
-        user = System.user_set.pop()
-        System.user_set.add(user)
+        user_set_list = list(System.user_set)
+        user = user_set_list[0]
         self.assertEqual(isinstance(user, User), True)
         self.assertEqual(user.name, 'admin')
         self.assertEqual(user.email, 'admin@vlabs.ac.in')

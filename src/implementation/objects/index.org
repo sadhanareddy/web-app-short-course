@@ -419,7 +419,58 @@ class TestUser(TestCase):
 #+END_SRC
 
 ** Session
-   
+   Session holds a user
+
+*** Mutable Data
+    Mutable attribute is
+    + user
+
+*** Definition
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+class Session(object):
+    user = None
+#+END_SRC
+
+*** Constructor
+**** Implementation
+    Signature of the constructor of =Session= is as follows:
+
+    #+BEGIN_EXAMPLE
+    session = Session(user=<object of User>)
+    #+END_EXAMPLE
+
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def __init__(self, **kwargs):
+        if 'user' not in kwargs:
+            raise AttributeRequired('mandatory variable `user` is missing!')
+        self._set_user(kwargs['user'])
+
+#+END_SRC
+
+**** Test the constructor
+#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+class TestSession(TestCase):
+    TESTING = True
+
+    def test_session_creation(self):
+        print "test_session_creation"
+        user = User(name=Name('yogesh'), email=Email('yogesh@vlabs.ac.in'), role=Role.admin)
+        session = Session(user=user)
+        self.assertEqual(isinstance(session, Session), True)
+        self.assertEqual(session.user.name.value, "yogesh")
+#+END_SRC
+
+*** Functions
+**** _set_user
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def _set_user(self, user):
+        if not isinstance(user, User):
+            raise TypeError('`user` argument should be of type user')
+        else:
+            self.user = user
+#+END_SRC
+***** Test
 * Run Test Cases
  
 #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no

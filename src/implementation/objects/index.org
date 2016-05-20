@@ -290,14 +290,13 @@ class User(object):
 class TestUser(TestCase):
     TESTING = True
 
-    def test_user_get_role(self):
-        print "test_user_creation_without_role"
-        user = User(name=Name('yogesh'), email=Email('yogesh@vlabs.ac.in'), role='test')
-        role = user.get_role()
-        self.assertEqual(role, 'test')
-
-    def test_user_get(self):
-        print "test_user_creation_with_role"
+    def test_user_creation(self):
+        print "test_user_creation"
+        user = User(name=Name('yogesh'), email=Email('yogesh@vlabs.ac.in'), role=Role.admin)
+        self.assertEqual(isinstance(user, User), True)
+        self.assertEqual(user.name, 'yogesh')
+        self.assertEqual(user.email, 'yogesh@vlabs.ac.in')
+        self.assertEqual(user.role, 'admin')
  #+END_SRC
 
 
@@ -324,7 +323,7 @@ class TestUser(TestCase):
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def set_role(self, role):
-        self.role = role
+        self.role = role.name
 #+END_SRC
 ***** Test
 
@@ -332,7 +331,7 @@ class TestUser(TestCase):
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def get_role(self):
-        return self.role.name
+        return self.role
 #+END_SRC
 ***** Test
 

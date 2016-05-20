@@ -201,6 +201,8 @@ class TestEmail(TestCase):
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
 class Role(object):
     name = None
+    admin = None
+    user = None
 #+END_SRC
 
 
@@ -212,75 +214,29 @@ class Role(object):
     #+END_EXAMPLE
 
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def __init__(self, **kwargs):
-        if 'name' not in kwargs:
-            raise AttributeRequired("mandatory attribute `name` is missing")
-        self.set_name(kwargs['name'])
+    def __init__(self, name):
+        self.name = name
 #+END_SRC
 
 *** Test Constructor
 #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
 class TestRole(TestCase):
     TESTING = True
-    def test_role_creation(self):
-        print "test_role_creation"
-        role = Role(name=Name('admin'))
-        self.assertEqual(role.get_name(), 'admin')
+    def test_role_admin(self):
+        print "test_role_admin"
+        self.assertEqual(Role.admin.name, 'admin')
+    
+    def test_role_user(self):
+        print "test_role_user"
+        self.assertEqual(Role.user.name, "user")
 #+END_SRC
 
 
-*** Functions
-
-**** setName
-***** Implementation
+*** Set role variables
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def set_name(self, name):
-        self.name = name.value
+Role.admin = Role("admin")
+Role.user = Role("user")
 #+END_SRC
-
-****** Test
-#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-    def test_role_set_name(self):
-        print "test_role_set_name"
-        role = Role(name=Name('admin'))
-        new_name = Name('staff')
-        role.set_name(new_name)
-        self.assertEqual(role.name, new_name.value)
-#+END_SRC
-
-
-**** getName
-
-#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def get_name(self):
-        return self.name
-#+END_SRC
-     
-
-**** getAll: Nil --> set[Role]
-
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-#    @staticmethod
-#    def get_all():
-#        return Role.roles
-#        pass
-#+END_SRC
-
-
-***** Test getAll: Nil --> set[Role]
- #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-    def test_role_get_all(self):
-        print "test_role_get_all"
- #+END_SRC
-
-
-**** to_client
-#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def to_client(self):
-        print "fill"
-#+END_SRC
-
 ** User
 
 *** Mutable Data
@@ -376,7 +332,7 @@ class TestUser(TestCase):
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def get_role(self):
-        return self.role
+        return self.role.name
 #+END_SRC
 ***** Test
 

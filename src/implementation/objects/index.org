@@ -251,7 +251,6 @@ Role.user = Role("user")
 *** Definition
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
 class User(object):
-    users = []     # this is a static variable, accessed by User.users
     name = None
     email = None
     role = None
@@ -282,7 +281,6 @@ class User(object):
         if 'role' not in kwargs:
             raise AttributeRequired("mandatory attribute `role` is missing")
         self.set_role(kwargs['role'])
-        User.users.append(self)
 #+END_SRC
 
 
@@ -420,6 +418,8 @@ class TestUser(TestCase):
         }
 #+END_SRC
 
+** Session
+   
 * Run Test Cases
  
 #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no

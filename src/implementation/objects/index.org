@@ -76,7 +76,17 @@ class AttributeRequired(Exception):
 
 #+END_SRC
 
+*** ConstraintError
+#+BEGIN_SRC python :tangle ../../src/op_exceptions.py :eval no
+class ConstraintError(Exception):
+    str = None
+    
+    def __init__(self, str):
+        self.str = str
 
+    def __str__(self):
+        return repr(self.str)
+#+END_SRC
 
 
 ** Utility Functions
@@ -507,6 +517,7 @@ class TestSession(TestCase):
 class System():
     user_set = set()
     session_set = set()
+    already_initialized = False
 #+END_SRC
 *** Constructor
 **** Implementation
@@ -517,8 +528,12 @@ class System():
      #+END_EXAMPLE
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def __init__(self):
-        admin_user = User(name=Name('admin'), email=Email('admin@vlabs.ac.in'), role=Role.admin)
-        System.user_set.add(admin_user)
+        if not already_initialized:
+            admin_user = User(name=Name('admin'), email=Email('admin@vlabs.ac.in'), role=Role.admin)
+            System.user_set.add(admin_user)
+            System.already_initialized = True
+        else:
+            raise ConstraintError
 #+END_SRC
 **** Test the constructor
 #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no

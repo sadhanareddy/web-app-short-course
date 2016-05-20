@@ -494,6 +494,135 @@ class TestSession(TestCase):
         session = Session(user=user)
         self.assertEqual(session.get_user_session(), user)
 #+END_SRC
+** System
+   System holds the system state variables.
+   - user_set :: this set holds the all the users created.
+   - session_set :: this set holds all the sessions created.
+*** Mutable Data
+    Following variables are mutable:
+    + user_set
+    + session_set
+*** Definition
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+class System():
+    user_set = set()
+    session_set = set()
+#+END_SRC
+*** Constructor
+**** Implementation
+     Signature of the constructor of =System= is as follows:
+
+     #+BEGIN_EXAMPLE
+     system = System()
+     #+END_EXAMPLE
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def __init__(self):
+        admin_user = User(name=Name('admin'), email=Email('admin@vlabs.ac.in'), role=Role.admin)
+        System.user_set.add(admin_user)
+#+END_SRC
+**** Test the constructor
+#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+    def test_session_constructor(self):
+        print "test_session_constructor"
+        system = System()
+        user = System.user_set.pop()
+        System.user_set.add(user)
+        self.assertEqual(isinstance(user, User), True)
+        self.assertEqual(user.name, 'admin')
+        self.assertEqual(user.email, 'admin@vlabs.ac.in')
+        self.assertEqual(user.role, 'admin')
+#+END_SRC
+*** Functions
+**** add_user
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def add_user(self):
+        print "fill"
+#+END_SRC
+
+***** Test
+
+**** del_user
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def del_user(self):
+        print "fill"
+#+END_SRC
+***** Test
+
+**** show_users
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def show_users(self):
+        print "fill"
+#+END_SRC
+***** Test
+
+**** get_user_by_email
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def get_user_by_email(self):
+        print "fill"
+#+END_SRC
+
+***** Test
+
+**** make_user
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def make_user(self):
+        print "fill"
+#+END_SRC
+***** Test
+
+**** get_email_of_user
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def get_email_of_user(self):
+        print "fill"
+#+END_SRC
+***** Test
+
+**** get_name_of_user
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def get_name_of_user(self):
+        print "fill"
+#+END_SRC
+***** Test
+
+**** get_role_of_user
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def get_role_of_user(self):
+        print "fill"
+#+END_SRC
+
+***** Test
+
+**** login
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def login(self):
+        print "fill"
+#+END_SRC
+***** Test
+
+**** del_session
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def del_session(self):
+        print "fill"
+#+END_SRC
+***** Test
+
+**** show_sessions
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def show_sessions(self):
+        print "fill"
+#+END_SRC
+***** Test
 * Run Test Cases
  
 #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no

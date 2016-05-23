@@ -87,7 +87,17 @@ class ConstraintError(Exception):
     def __str__(self):
         return repr(self.str)
 #+END_SRC
+*** DuplicateEntry
+#+BEGIN_SRC python :tangle ../../src/op_exceptions.py :eval no
+class DuplicateEntry(Exception):
+    str = None
+    
+    def __init__(self, str):
+        self.str = str
 
+    def __str__(self):
+        return repr(self.str)
+#+END_SRC
 
 ** Utility Functions
 
@@ -556,15 +566,28 @@ class TestSystem(TestCase):
         self.assertEqual(user.role, 'admin')
 #+END_SRC
 *** Functions
+
+**** make_user
+***** Implementation
+#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
+    def make_user(self, name, email, role):
+        user = User(name=name, email=email, role=role)
+        print "fill"
+#+END_SRC
+***** Test
 **** add_user
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def add_user(self):
+    def add_user(self, user):
+        if user in user_set:
+            raise 
+        else:
+            print "check other conditions"
+            System.user_set.add(user)
         print "fill"
 #+END_SRC
 
 ***** Test
-
 **** del_user
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
@@ -572,7 +595,6 @@ class TestSystem(TestCase):
         print "fill"
 #+END_SRC
 ***** Test
-
 **** show_users
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
@@ -580,7 +602,6 @@ class TestSystem(TestCase):
         print "fill"
 #+END_SRC
 ***** Test
-
 **** get_user_by_email
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
@@ -589,15 +610,6 @@ class TestSystem(TestCase):
 #+END_SRC
 
 ***** Test
-
-**** make_user
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def make_user(self):
-        print "fill"
-#+END_SRC
-***** Test
-
 **** get_email_of_user
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no

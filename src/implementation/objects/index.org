@@ -549,7 +549,7 @@ class TestSystem(TestCase):
 
     def test_system_constructor(self):
         print "test_system_constructor"
-        user = user_set[0]
+        user = System.user_set[0]
         self.assertEqual(isinstance(user, User), True)
         self.assertEqual(user.name, 'admin')
         self.assertEqual(user.email, 'admin@vlabs.ac.in')

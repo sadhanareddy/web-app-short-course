@@ -506,8 +506,8 @@ class TestSession(TestCase):
 #+END_SRC
 ** System
    System holds the system state variables.
-   - user_set :: this set holds the all the users created.
-   - session_set :: this set holds all the sessions created.
+   - user_set :: this holds the all the users created.
+   - session_set :: this holds all the sessions created.
 *** Mutable Data
     Following variables are mutable:
     + user_set
@@ -515,8 +515,8 @@ class TestSession(TestCase):
 *** Definition
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
 class System():
-    user_set = set()
-    session_set = set()
+    user_set = []
+    session_set = []
     already_initialized = False
 #+END_SRC
 *** Constructor
@@ -530,7 +530,7 @@ class System():
     def __init__(self):
         if not System.already_initialized:
             admin_user = User(name=Name('admin'), email=Email('admin@vlabs.ac.in'), role=Role.admin)
-            System.user_set.add(admin_user)
+            System.user_set.append(admin_user)
             System.already_initialized = True
         else:
             raise ConstraintError('System is already initialized!')
@@ -544,13 +544,12 @@ class TestSystem(TestCase):
         system = System()
 
     def tearDown(self):
-        System.user_set.pop()
+        del System.user_set[0]
         System.already_initialized = False
 
     def test_system_constructor(self):
         print "test_system_constructor"
-        user_set_list = list(System.user_set)
-        user = user_set_list[0]
+        user = user_set[0]
         self.assertEqual(isinstance(user, User), True)
         self.assertEqual(user.name, 'admin')
         self.assertEqual(user.email, 'admin@vlabs.ac.in')

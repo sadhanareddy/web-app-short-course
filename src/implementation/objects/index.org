@@ -87,18 +87,6 @@ class ConstraintError(Exception):
     def __str__(self):
         return repr(self.str)
 #+END_SRC
-*** DuplicateEntry
-#+BEGIN_SRC python :tangle ../../src/op_exceptions.py :eval no
-class DuplicateEntry(Exception):
-    str = None
-    
-    def __init__(self, str):
-        self.str = str
-
-    def __str__(self):
-        return repr(self.str)
-#+END_SRC
-
 ** Utility Functions
 
 *** is_alphabetic_string(value)

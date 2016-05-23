@@ -13,7 +13,7 @@
 ** Imports for Python API
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
 # -*- coding: utf-8 -*-
-from op_exceptions import AttributeRequired
+from op_exceptions import *
 from utils import *
 #+END_SRC
 
@@ -559,23 +559,52 @@ class TestSystem(TestCase):
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def make_user(self, name, email, role):
+        if not isinstance(name, Name):
+            raise ConstraintError('`name` should be of type Name')
+        if not isinstance(email, Email):
+            raise ConstraintError('`email` should be of type Email')
+        if not isinstance(role, Role):
+            raise ConstraintError('`role` should be of type Role')
         user = User(name=name, email=email, role=role)
-        print "fill"
+        return user
 #+END_SRC
 ***** Test
+#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+    def test_make_user(self):
+        print "test_make_user"
+        name = Name('yogesh')
+        email = Email('yogesh@vlabs.ac.in')
+        role = Role.admin
+        user = system.make_user(name=name, email=email, role=role)
+        self.assertEqual(isinstance(user, User), True)
+        self.assertEqual(user.name, name.value)
+#+END_SRC
 **** add_user
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def add_user(self, user):
-        if user in user_set:
-            raise 
+        if not isinstance(user, User):
+            raise TypeError('user should be of type `User`') 
+        if user in System.user_set:
+            return
         else:
-            print "check other conditions"
-            System.user_set.add(user)
-        print "fill"
+            duplicate = False
+            for element in System.user_set:
+                if element.email == user.email:
+                    duplicate = True
+                    break
+            if not duplicate:
+                System.user_set.append(user)
+        return
 #+END_SRC
 
 ***** Test
+#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
+    def test_add_user(self):
+        print "test_add_user"
+        
+
+#+END_SRC
 **** del_user
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no

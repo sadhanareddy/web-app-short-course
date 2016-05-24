@@ -615,11 +615,19 @@ class TestSystem(TestCase):
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def show_users(self):
-        return system.user_set
+        return System.user_set
 #+END_SRC
 ***** Test
 #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-
+    def test_show_users(self):
+        print "test_show_users"
+        user = User(name=Name('a'), email=Email('a@a.com'), role=Role.admin)
+        system.user_set.append(user)
+        userList = system.show_users()
+        present = False
+        if user in userList:
+            present = True
+        self.assertEqual(present, True)
 #+END_SRC
 
 **** get_user_by_email
@@ -652,41 +660,66 @@ class TestSystem(TestCase):
         if not isinstance(user, User):
             raise TypeError('user should be of type `User`')
         registered = False
-        for element in system.user_set:
-            if element.email.value == user.email.value:
+        for element in System.user_set:
+            if element.email == user.email:
                 registered = True
         if registered:
-            for element in system.session_set:
-                 if element.email.value == user.email.value
+            for element in System.session_set:
+                 if element.email == user.email:
                      return
-            system.session_set.append(user)
+            System.session_set.append(user)
         return
 #+END_SRC
 ***** Test
 #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
     def test_login(self):
-        user = User(name=Name(''))
+        print "test_login"
+        user = User(name=Name('a'), email=Email('a@a.com'), role=Role.admin)
+        system.user_set.append(user)
+        system.login(user)
+        logedin = False
+        if user in system.session_set:
+            logedin = True
+        self.assertEqual(logedin, True)
 #+END_SRC
 **** del_session
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def del_session(self):
-        print "fill"
+    def del_session(self, user):
+        System.session_set.remove(user)
+        return
 #+END_SRC
 ***** Test
 #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-
+    def test_del_session(self):
+        print "test_del_session"
+        user = system.user_set[0]
+        system.session_set.append(user)
+        system.del_session(user)
+        deleted = False
+        if user not in system.session_set:
+            deleted = True
+        self.assertEqual(deleted, True)
 #+END_SRC
 
 **** show_sessions
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def show_sessions(self):
-        return system.session_set
+        return System.session_set
 #+END_SRC
 ***** Test
 #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-
+    def test_show_sessions(self):
+        print "test_show_sessions"
+        user = User(name=Name('a'), email=Email('a@a.com'), role=Role.admin)
+        system.user_set.append(user)
+        system.session_set.append(user)
+        sessionList = system.show_sessions()
+        present = False
+        if user in sessionList:
+            present = True
+        self.assertEqual(present, True)
 #+END_SRC
 * Run Test Cases
  

@@ -397,23 +397,6 @@ class TestUser(TestCase):
         self.assertEqual(user.get_name(), 'yogesh')
 #+END_SRC
 
-**** getAll: Nil --> set[User]
-
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-#    @staticmethod
-#    def get_all():
-#        return users
-#+END_SRC
-
-
-***** Test getAll
-#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-    def test_user_get_all(self):
-        print "test_user_get_all"
-
-#+END_SRC
-
 **** toClient
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def to_client(self):
@@ -662,49 +645,27 @@ class TestSystem(TestCase):
         system.user_set.remove(user)
         del user
 #+END_SRC
-**** get_email_of_user
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def get_email_of_user(self):
-        print "fill"
-#+END_SRC
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-
-#+END_SRC
-
-**** get_name_of_user
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def get_name_of_user(self):
-        print "fill"
-#+END_SRC
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-
-#+END_SRC
-
-**** get_role_of_user
-***** Implementation
-#+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def get_role_of_user(self):
-        print "fill"
-#+END_SRC
-
-***** Test
-#+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-
-#+END_SRC
-
 **** login
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
-    def login(self):
-        print "fill"
+    def login(self, user):
+        if not isinstance(user, User):
+            raise TypeError('user should be of type `User`')
+        registered = False
+        for element in system.user_set:
+            if element.email.value == user.email.value:
+                registered = True
+        if registered:
+            for element in system.session_set:
+                 if element.email.value == user.email.value
+                     return
+            system.session_set.append(user)
+        return
 #+END_SRC
 ***** Test
 #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-
+    def test_login(self):
+        user = User(name=Name(''))
 #+END_SRC
 **** del_session
 ***** Implementation
@@ -721,7 +682,7 @@ class TestSystem(TestCase):
 ***** Implementation
 #+BEGIN_SRC python :tangle ../../src/obj.py :eval no
     def show_sessions(self):
-        print "fill"
+        return system.session_set
 #+END_SRC
 ***** Test
 #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no

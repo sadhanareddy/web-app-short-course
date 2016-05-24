@@ -652,7 +652,15 @@ class TestSystem(TestCase):
 
 ***** Test
 #+BEGIN_SRC python :tangle ../../tests/test_obj.py :eval no
-    def 
+    def test_get_user_by_email(self):
+        print "test_get_user_by_email"
+        user = User(name=Name('a'), email=Email('a@a.com'), role=Role.admin)
+        email = Email('a@a.com')
+        system.user_set.append(user)
+        returnedUser = system.get_user_by_email(email)
+        self.assertEqual(user, returnedUser)
+        system.user_set.remove(user)
+        del user
 #+END_SRC
 **** get_email_of_user
 ***** Implementation

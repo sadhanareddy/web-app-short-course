@@ -650,8 +650,6 @@ class TestSystem(TestCase):
         system.user_set.append(user)
         returnedUser = system.get_user_by_email(email)
         self.assertEqual(user, returnedUser)
-        system.user_set.remove(user)
-        del user
 #+END_SRC
 **** login
 ***** Implementation
